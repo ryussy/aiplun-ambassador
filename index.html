@@ -528,10 +528,15 @@
     btn.textContent = '送信中...';
 
     const data = {
-      氏名: name.value, 大学学部: univ.value, 学年: grade.value, メール: email.value,
+      email: email.value,
+      氏名: name.value,
+      大学学部: univ.value,
+      学年: grade.value,
       希望ロール: role.value,
       活動可能曜日: Array.from(days).map(d => d.value).join('・'),
-      週の活動時間: hours.value, 志望動機: motive.value, 自己PR: pr.value,
+      週の活動時間: hours.value,
+      志望動機: motive.value,
+      自己PR: pr.value,
     };
 
     try {
