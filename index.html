@@ -527,23 +527,22 @@
     btn.disabled = true;
     btn.textContent = '送信中...';
 
-    const data = {
-      email: email.value,
-      氏名: name.value,
-      大学学部: univ.value,
-      学年: grade.value,
-      希望ロール: role.value,
-      活動可能曜日: Array.from(days).map(d => d.value).join('・'),
-      週の活動時間: hours.value,
-      志望動機: motive.value,
-      自己PR: pr.value,
-    };
+    const data = new FormData();
+    data.append('email', email.value);
+    data.append('氏名', name.value);
+    data.append('大学学部', univ.value);
+    data.append('学年', grade.value);
+    data.append('希望ロール', role.value);
+    data.append('活動可能曜日', Array.from(days).map(d => d.value).join('・'));
+    data.append('週の活動時間', hours.value);
+    data.append('志望動機', motive.value);
+    data.append('自己PR', pr.value);
 
     try {
       const res = await fetch('https://formspree.io/f/mrejajne', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 'Accept': 'application/json' },
+        body: data,
       });
       if (res.ok) {
         document.getElementById('success-box').style.display = 'block';
