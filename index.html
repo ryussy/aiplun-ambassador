@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aiplun 学生アンバサダー募集</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f0ecea;
+      min-height: 100vh;
+    }
+
+    /* ─── VIEW SWITCHING ─── */
+    #view-poster { display: block; }
+    #view-form   { display: none; }
+
+    /* ══════════════════════════════
+       POSTER STYLES
+    ══════════════════════════════ */
+    .poster-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px 60px;
+    }
+    .poster {
+      width: 680px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.13);
+    }
+
+    .hero {
+      background: linear-gradient(160deg, #b02248 0%, #d94068 50%, #f07090 100%);
+      padding: 52px 48px 44px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-circle1 { position: absolute; right: -80px; top: -80px; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+    .hero-circle2 { position: absolute; right: 60px; bottom: -100px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; position: relative; z-index: 1; }
+    .logo-mark { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .logo-text { font-size: 20px; font-weight: 900; letter-spacing: 0.04em; }
+    .logo-sub { font-size: 11px; opacity: 0.75; letter-spacing: 0.12em; font-weight: 500; }
+    .hero-eyecatch { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; background: rgba(255,255,255,0.2); display: inline-block; padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; position: relative; z-index: 1; }
+    .hero h1 { font-size: 30px; font-weight: 900; line-height: 1.4; margin-bottom: 18px; position: relative; z-index: 1; }
+    .hero h1 em { font-style: normal; background: rgba(255,255,255,0.25); border-radius: 4px; padding: 0 6px; }
+    .hero-desc { font-size: 14px; line-height: 1.85; opacity: 0.93; position: relative; z-index: 1; max-width: 500px; }
+
+    .what { padding: 40px 48px 36px; background: #fff; }
+    .sec-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #b02248; text-transform: uppercase; margin-bottom: 20px; }
+    .sec-label::before { content: ''; display: block; width: 24px; height: 2px; background: #b02248; border-radius: 2px; }
+    .what h2 { font-size: 20px; font-weight: 900; color: #1a0a10; margin-bottom: 8px; line-height: 1.4; }
+    .what-lead { font-size: 14px; color: #555; line-height: 1.85; margin-bottom: 28px; }
+    .what-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .wc { background: #fdf5f7; border-radius: 12px; padding: 18px 16px; text-align: center; }
+    .wc-icon { font-size: 28px; margin-bottom: 8px; line-height: 1; }
+    .wc-title { font-size: 13px; font-weight: 700; color: #1a0a10; margin-bottom: 5px; }
+    .wc-body { font-size: 11px; color: #777; line-height: 1.7; }
+
+    .stripe-bar { height: 6px; background: repeating-linear-gradient(90deg, #f07090 0px, #f07090 12px, #ffc0ce 12px, #ffc0ce 24px); }
+
+    .roles { padding: 40px 48px; background: #fff9fa; }
+    .roles h2 { font-size: 20px; font-weight: 900; color: #1a0a10; margin-bottom: 6px; }
+    .roles-sub { font-size: 13px; color: #888; margin-bottom: 24px; line-height: 1.6; }
+    .role-list { display: flex; flex-direction: column; gap: 12px; }
+    .role-row { background: white; border-radius: 14px; padding: 20px 22px; display: grid; grid-template-columns: 54px 1fr auto; align-items: center; gap: 16px; box-shadow: 0 2px 10px rgba(176,34,72,0.07); border: 1.5px solid #f5e6ea; }
+    .role-row.leader-row { border-color: #b02248; background: linear-gradient(135deg, #fff0f3, #fff8f9); }
+    .role-icon-box { width: 54px; height: 54px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; gap: 2px; }
+    .role-icon-box .emoji { font-size: 22px; line-height: 1; }
+    .role-icon-box .ri-label { font-size: 8px; font-weight: 700; letter-spacing: 0.06em; opacity: 0.8; }
+    .ri-sales  { background: #fff0e6; color: #c05010; }
+    .ri-mkt    { background: #e8f0ff; color: #3060c0; }
+    .ri-campus { background: #e8fff0; color: #208050; }
+    .ri-leader { background: #b02248; color: white; }
+    .role-name { font-size: 16px; font-weight: 800; color: #1a0a10; margin-bottom: 4px; }
+    .role-desc-text { font-size: 12px; color: #666; line-height: 1.65; }
+    .role-kpi-box { background: #fdf5f7; border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 120px; flex-shrink: 0; }
+    .leader-row .role-kpi-box { background: rgba(176,34,72,0.08); }
+    .kpi-label { font-size: 9px; font-weight: 700; color: #b02248; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .kpi-val { font-size: 11px; font-weight: 700; color: #1a0a10; line-height: 1.6; }
+
+    .trial { padding: 36px 48px; background: white; }
+    .trial h2 { font-size: 20px; font-weight: 900; color: #1a0a10; margin-bottom: 6px; }
+    .trial-sub { font-size: 13px; color: #888; margin-bottom: 24px; }
+    .flow { display: grid; grid-template-columns: 1fr 28px 1fr 28px 1fr; align-items: center; }
+    .flow-step { background: #fdf5f7; border-radius: 12px; padding: 18px 14px; text-align: center; }
+    .flow-step.active { background: linear-gradient(135deg, #b02248, #d94068); color: white; }
+    .flow-num { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; color: #b02248; margin-bottom: 6px; }
+    .flow-step.active .flow-num { color: rgba(255,255,255,0.7); }
+    .flow-title { font-size: 14px; font-weight: 800; color: #1a0a10; margin-bottom: 5px; line-height: 1.3; }
+    .flow-step.active .flow-title { color: white; }
+    .flow-body { font-size: 11px; color: #777; line-height: 1.6; }
+    .flow-step.active .flow-body { color: rgba(255,255,255,0.85); }
+    .flow-arrow { text-align: center; font-size: 20px; color: #d94068; font-weight: 700; }
+
+    .value { padding: 32px 48px; background: #1a0a10; color: white; }
+    .value h2 { font-size: 17px; font-weight: 800; margin-bottom: 16px; opacity: 0.95; }
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .vi { display: flex; align-items: flex-start; gap: 10px; }
+    .vi-check { width: 20px; height: 20px; background: #b02248; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .vi-text { font-size: 13px; line-height: 1.6; opacity: 0.88; }
+
+    .cta { padding: 36px 48px; background: white; text-align: center; }
+    .cta h2 { font-size: 22px; font-weight: 900; color: #1a0a10; margin-bottom: 8px; }
+    .cta-sub { font-size: 13px; color: #888; margin-bottom: 28px; line-height: 1.7; }
+    .cta-row { display: flex; align-items: center; justify-content: center; }
+    .cta-info { text-align: left; }
+    .cta-info p { font-size: 13px; color: #555; line-height: 1.8; }
+
+    .goto-form-btn {
+      display: inline-block;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #b02248, #d94068);
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'Noto Sans JP', sans-serif;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(176,34,72,0.35);
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .goto-form-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* ══════════════════════════════
+       FORM STYLES
+    ══════════════════════════════ */
+    .form-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: #b02248;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      margin-bottom: 16px;
+      padding: 6px 0;
+    }
+    .back-btn:hover { opacity: 0.7; }
+
+    .hdr {
+      background: linear-gradient(160deg, #b02248 0%, #d94068 50%, #f07090 100%);
+      border-radius: 20px 20px 0 0;
+      padding: 44px 40px 36px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hdr-circle { position: absolute; right: -60px; bottom: -60px; width: 220px; height: 220px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+    .hdr-logo { font-size: 13px; font-weight: 700; letter-spacing: 0.15em; opacity: 0.8; margin-bottom: 14px; position: relative; z-index: 1; }
+    .hdr h1 { font-size: 26px; font-weight: 900; line-height: 1.35; margin-bottom: 12px; position: relative; z-index: 1; }
+    .hdr-note { font-size: 13px; line-height: 1.8; opacity: 0.9; position: relative; z-index: 1; }
+
+    .card { background: white; border-radius: 0 0 20px 20px; padding: 36px 40px 44px; box-shadow: 0 10px 40px rgba(0,0,0,0.09); }
+
+    .sec { margin-bottom: 32px; }
+    .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #fde8ec; }
+    .sec-icon { width: 32px; height: 32px; background: #fde8ec; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .sec-title { font-size: 15px; font-weight: 800; color: #1a0a10; }
+    .sec-sub { font-size: 11px; color: #aaa; font-weight: 400; margin-top: 1px; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #1a0a10; margin-bottom: 7px; }
+    .req { background: #b02248; color: white; font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 3px; letter-spacing: 0.05em; }
+
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%; padding: 13px 15px; border: 2px solid #ede0e3; border-radius: 10px;
+      font-size: 14px; font-family: 'Noto Sans JP', sans-serif; color: #1a0a10;
+      background: #fdfafa; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #b02248; box-shadow: 0 0 0 4px rgba(176,34,72,0.08); background: white; }
+    input::placeholder, textarea::placeholder { color: #ccc; font-size: 13px; }
+    textarea { resize: vertical; min-height: 110px; line-height: 1.75; }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23b02248' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .role-opt { position: relative; }
+    .role-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .role-opt label { display: block; border: 2px solid #ede0e3; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.15s; background: #fdfafa; }
+    .role-opt input:checked + label { border-color: #b02248; background: #fff0f3; box-shadow: 0 0 0 3px rgba(176,34,72,0.1); }
+    .rl-badge { display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; }
+    .rl-sales  { background: #fff0e6; color: #c05010; }
+    .rl-mkt    { background: #e8f0ff; color: #3060c0; }
+    .rl-campus { background: #e8fff0; color: #208050; }
+    .rl-name { font-size: 15px; font-weight: 800; color: #1a0a10; margin-bottom: 4px; }
+    .rl-kpi { font-size: 11px; color: #888; line-height: 1.5; }
+    .role-opt input:checked + label .rl-kpi { color: #b02248; font-weight: 600; }
+
+    .day-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .day-chip { position: relative; }
+    .day-chip input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .day-chip label { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 2px solid #ede0e3; border-radius: 10px; font-size: 13px; font-weight: 700; color: #888; cursor: pointer; transition: all 0.15s; background: #fdfafa; }
+    .day-chip input:checked + label { border-color: #b02248; background: #b02248; color: white; box-shadow: 0 2px 8px rgba(176,34,72,0.3); }
+
+    .field-error { border-color: #e04040 !important; box-shadow: 0 0 0 4px rgba(224,64,64,0.08) !important; }
+    .err-msg { font-size: 11px; color: #e04040; margin-top: 5px; display: flex; align-items: center; gap: 4px; }
+    .err-msg::before { content: '⚠'; }
+
+    .submit-sec { margin-top: 36px; text-align: center; }
+    .submit-btn {
+      background: linear-gradient(135deg, #b02248, #d94068); color: white; border: none;
+      padding: 18px 56px; border-radius: 50px; font-size: 16px; font-weight: 800;
+      font-family: 'Noto Sans JP', sans-serif; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 6px 20px rgba(176,34,72,0.35); letter-spacing: 0.05em;
+    }
+    .submit-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    .submit-note { font-size: 12px; color: #bbb; margin-top: 14px; line-height: 1.8; }
+    .submit-note a { color: #b02248; }
+
+    .success-box { display: none; background: #edfaf3; border: 2px solid #4caf7a; border-radius: 14px; padding: 28px 24px; text-align: center; margin-top: 20px; }
+    .success-box .s-icon { font-size: 40px; margin-bottom: 12px; }
+    .success-box h3 { font-size: 18px; font-weight: 800; color: #1a5c36; margin-bottom: 8px; }
+    .success-box p { font-size: 13px; color: #2a7a4a; line-height: 1.8; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .poster-wrap { padding: 0; }
+      .poster { width: 100%; border-radius: 0; box-shadow: none; }
+      .hero { padding: 36px 20px 32px; }
+      .hero h1 { font-size: 22px; }
+      .hero-desc { font-size: 13px; }
+      .what { padding: 28px 20px; }
+      .what h2 { font-size: 17px; }
+      .what-cards { grid-template-columns: 1fr; }
+      .roles { padding: 28px 20px; }
+      .roles h2 { font-size: 17px; }
+      .role-row { grid-template-columns: 44px 1fr; grid-template-rows: auto auto; }
+      .role-kpi-box { grid-column: 1 / -1; min-width: unset; text-align: left; padding: 8px 12px; }
+      .role-icon-box { width: 44px; height: 44px; }
+      .trial { padding: 28px 20px; }
+      .trial h2 { font-size: 17px; }
+      .flow { grid-template-columns: 1fr; gap: 8px; }
+      .flow-arrow { transform: rotate(90deg); text-align: center; }
+      .value { padding: 24px 20px; }
+      .value-grid { grid-template-columns: 1fr; gap: 10px; }
+      .cta { padding: 28px 20px; }
+      .cta h2 { font-size: 18px; }
+      .hdr, .card { padding-left: 20px; padding-right: 20px; }
+      .two-col, .role-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; }
+      .poster-wrap { padding: 0; }
+      .poster { box-shadow: none; border-radius: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ POSTER VIEW ══ -->
+  <div id="view-poster">
+    <div class="poster-wrap">
+      <div class="poster">
+
+        <div class="hero">
+          <div class="hero-circle1"></div>
+          <div class="hero-circle2"></div>
+          <div class="logo-area">
+            <div class="logo-mark">💕</div>
+            <div>
+              <div class="logo-text">Aiplun</div>
+              <div class="logo-sub">KYOTO × AI DATE APP</div>
+            </div>
+          </div>
+          <div class="hero-eyecatch">📢 学生アンバサダー 募集中</div>
+          <h1>京都から、<br><em>恋愛の送客プラットフォーム</em>を<br>一緒につくりませんか？</h1>
+          <p class="hero-desc">AIがデートプランを1分で提案するアプリ。<br>学生メンバーと一緒に、京都の店舗・ユーザー・アプリを<br>本物のビジネスとして動かします。</p>
+        </div>
+
+        <div class="what">
+          <div class="sec-label">Aiplunとは？</div>
+          <h2>デートに迷う3人に1人を成功に導くサービス</h2>
+          <p class="what-lead">「どこ行こう？」を解決するAIデートプランアプリ。ユーザーへのプラン提案、店舗への送客、学生メンバーの活躍が組み合わさって成長するプラットフォームです。</p>
+          <div class="what-cards">
+            <div class="wc"><div class="wc-icon">🤖</div><div class="wc-title">AIが1分でプラン提案</div><div class="wc-body">デートコース・お店・予算をAIが自動生成</div></div>
+            <div class="wc"><div class="wc-icon">🏪</div><div class="wc-title">京都の店舗と提携</div><div class="wc-body">カフェ・飲食・体験施設へカップルを送客</div></div>
+            <div class="wc"><div class="wc-icon">📱</div><div class="wc-title">App Store公開済み</div><div class="wc-body">実際に稼働するアプリ。学生も最前線で活躍</div></div>
+          </div>
+        </div>
+
+        <div class="stripe-bar"></div>
+
+        <div class="roles">
+          <div class="sec-label">募集ロール</div>
+          <h2>あなたに合ったポジションで参加できます</h2>
+          <p class="roles-sub">1ヶ月のトライアルからスタート。結果を出したらリーダーへ昇格。</p>
+          <div class="role-list">
+            <div class="role-row leader-row">
+              <div class="role-icon-box ri-leader"><span class="emoji">👑</span><span class="ri-label">LEADER</span></div>
+              <div class="role-info"><div class="role-name">アンバサダーリーダー</div><div class="role-desc-text">メンバー全員の進捗管理・週次報告・代表と直接コミュニケーション。チームをまとめるリーダーポジション。</div></div>
+              <div class="role-kpi-box"><div class="kpi-label">月間KPI</div><div class="kpi-val">提携10件以上<br>SNS 月20万表示<br><small style="font-size:9px;font-weight:400;color:#b02248;opacity:.8;">※店舗と掲載契約／投稿が月20万回見られる</small></div></div>
+            </div>
+            <div class="role-row">
+              <div class="role-icon-box ri-sales"><span class="emoji">🤝</span><span class="ri-label">SALES</span></div>
+              <div class="role-info"><div class="role-name">店舗営業</div><div class="role-desc-text">京都のカフェ・飲食店・体験施設へ直接アポを取り、無料掲載・特典獲得の交渉を担当。</div></div>
+              <div class="role-kpi-box"><div class="kpi-label">週次KPI</div><div class="kpi-val">週20件営業<br>月3件提携獲得<br><small style="font-size:9px;font-weight:400;color:#b02248;opacity:.8;">※週20軒アプローチ／月3軒と掲載契約</small></div></div>
+            </div>
+            <div class="role-row">
+              <div class="role-icon-box ri-mkt"><span class="emoji">📸</span><span class="ri-label">MARKETING</span></div>
+              <div class="role-info"><div class="role-name">SNSマーケ</div><div class="role-desc-text">Instagram / TikTok / Xで京都デート投稿・提携店紹介・アプリDL誘導の投稿を企画・運用。</div></div>
+              <div class="role-kpi-box"><div class="kpi-label">週次KPI</div><div class="kpi-val">週5投稿<br>月10万表示<br><small style="font-size:9px;font-weight:400;color:#b02248;opacity:.8;">※週5回SNS投稿／月間10万回見られる</small></div></div>
+            </div>
+            <div class="role-row">
+              <div class="role-icon-box ri-campus"><span class="emoji">🎓</span><span class="ri-label">CAMPUS</span></div>
+              <div class="role-info"><div class="role-name">学生広報</div><div class="role-desc-text">大学・サークル・友人紹介でユーザー獲得。アプリ体験会の企画・運営、アンケート収集。</div></div>
+              <div class="role-kpi-box"><div class="kpi-label">月次KPI</div><div class="kpi-val">月20人紹介<br>月10件アンケート<br><small style="font-size:9px;font-weight:400;color:#b02248;opacity:.8;">※月20人にアプリをDL／10人にアンケート回答</small></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trial">
+          <div class="sec-label">参加の流れ</div>
+          <h2>まずは1ヶ月のトライアルから</h2>
+          <p class="trial-sub">リスクなしで参加できます。成果が出たらそのまま継続・昇格。</p>
+          <div class="flow">
+            <div class="flow-step"><div class="flow-num">STEP 1</div><div class="flow-title">申し込み・研修</div><div class="flow-body">KPI設定・チーム研修・活動開始</div></div>
+            <div class="flow-arrow">›</div>
+            <div class="flow-step"><div class="flow-num">STEP 2</div><div class="flow-title">1ヶ月活動</div><div class="flow-body">営業・SNS・紹介<br>毎週数字で確認</div></div>
+            <div class="flow-arrow">›</div>
+            <div class="flow-step active"><div class="flow-num">STEP 3</div><div class="flow-title">継続 &amp;<br>リーダー昇格</div><div class="flow-body">実績に応じて<br>責任・報酬が拡大</div></div>
+          </div>
+        </div>
+
+        <div class="value">
+          <h2>🎯 参加することで得られる価値</h2>
+          <div class="value-grid">
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">就活で語れる<strong>営業・SNS・DL数</strong>の実績</div></div>
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">本物のスタートアップでの<strong>実務経験</strong></div></div>
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">KPI達成で<strong>リーダーへ昇格</strong></div></div>
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">成果に応じて<strong>責任範囲と報酬が拡大</strong></div></div>
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">代表と<strong>直接コミュニケーション</strong></div></div>
+            <div class="vi"><div class="vi-check">✓</div><div class="vi-text">京都で本当に動くビジネスを<strong>最前線で体験</strong></div></div>
+          </div>
+        </div>
+
+        <div class="cta">
+          <h2>気軽に申し込んでみてください</h2>
+          <p class="cta-sub">活動は週数時間からOK。1ヶ月のトライアルで自分に合うか確かめられます。</p>
+          <div class="cta-row">
+            <div class="cta-info">
+              <p>▶ お問い合わせ: royryu221317@gmail.com</p>
+              <button class="goto-form-btn" onclick="showForm()">申し込みフォームへ →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FORM VIEW ══ -->
+  <div id="view-form">
+    <div class="form-wrap">
+      <button class="back-btn" onclick="showPoster()">← ポスターに戻る</button>
+
+      <div class="hdr">
+        <div class="hdr-circle"></div>
+        <div class="hdr-logo">💕 AIPLUN — KYOTO AMBASSADOR PROGRAM</div>
+        <h1>学生アンバサダー<br>申し込みフォーム</h1>
+        <p class="hdr-note">まずは1ヶ月のトライアルから。週数時間でOK。<br>結果を出した人はリーダーへ昇格。</p>
+      </div>
+
+      <div class="card">
+        <form id="form" novalidate>
+
+          <div class="sec">
+            <div class="sec-head"><div class="sec-icon">👤</div><div><div class="sec-title">基本情報</div><div class="sec-sub">あなたのことを教えてください</div></div></div>
+            <div class="two-col">
+              <div class="field"><div class="label">氏名 <span class="req">必須</span></div><input type="text" name="name" placeholder="山田 太郎"></div>
+              <div class="field"><div class="label">学年 <span class="req">必須</span></div>
+                <select name="grade"><option value="">選択してください</option><option>学部1年</option><option>学部2年</option><option>学部3年</option><option>学部4年</option><option>修士1年</option><option>修士2年</option><option>博士課程</option></select>
+              </div>
+            </div>
+            <div class="field"><div class="label">大学名・学部 <span class="req">必須</span></div><input type="text" name="university" placeholder="例：京都大学 経済学部"></div>
+            <div class="field"><div class="label">メールアドレス <span class="req">必須</span></div><input type="email" name="email" placeholder="example@email.com"></div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-head"><div class="sec-icon">🎯</div><div><div class="sec-title">希望ロール</div><div class="sec-sub">1つ選んでください（相談の上で変更可）</div></div></div>
+            <div class="role-grid" id="role-grid">
+              <div class="role-opt">
+                <input type="radio" name="role" id="r-sales" value="店舗営業（Sales Member）">
+                <label for="r-sales"><div class="rl-badge rl-sales">SALES</div><div class="rl-name">🤝 店舗営業</div><div class="rl-kpi">週20件営業・月3件提携獲得<br><small style="font-size:10px;opacity:.7;">※週20軒アプローチ／月3軒と掲載契約</small></div></label>
+              </div>
+              <div class="role-opt">
+                <input type="radio" name="role" id="r-mkt" value="SNSマーケ（Marketing Member）">
+                <label for="r-mkt"><div class="rl-badge rl-mkt">MARKETING</div><div class="rl-name">📸 SNSマーケ</div><div class="rl-kpi">週5投稿・月10万表示<br><small style="font-size:10px;opacity:.7;">※週5回SNS投稿／月間10万回見られる</small></div></label>
+              </div>
+              <div class="role-opt">
+                <input type="radio" name="role" id="r-campus" value="学生広報（Campus Member）">
+                <label for="r-campus"><div class="rl-badge rl-campus">CAMPUS</div><div class="rl-name">🎓 学生広報</div><div class="rl-kpi">月20人紹介・月10件アンケート<br><small style="font-size:10px;opacity:.7;">※月20人にDL／10人にアンケート回答</small></div></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-head"><div class="sec-icon">📅</div><div><div class="sec-title">活動スケジュール</div><div class="sec-sub">参加できる日時の目安を教えてください</div></div></div>
+            <div class="field">
+              <div class="label">活動できる曜日 <span class="req">必須</span></div>
+              <div class="day-chips" id="day-chips">
+                <div class="day-chip"><input type="checkbox" id="d-mon" name="days" value="月"><label for="d-mon">月</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-tue" name="days" value="火"><label for="d-tue">火</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-wed" name="days" value="水"><label for="d-wed">水</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-thu" name="days" value="木"><label for="d-thu">木</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-fri" name="days" value="金"><label for="d-fri">金</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-sat" name="days" value="土"><label for="d-sat">土</label></div>
+                <div class="day-chip"><input type="checkbox" id="d-sun" name="days" value="日"><label for="d-sun">日</label></div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label">週の活動時間の目安 <span class="req">必須</span></div>
+              <select name="hours"><option value="">選んでください</option><option>5時間未満</option><option>5〜10時間</option><option>10〜20時間</option><option>20時間以上</option></select>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="sec-head"><div class="sec-icon">✍️</div><div><div class="sec-title">志望動機・自己PR</div><div class="sec-sub">なぜ参加したいか、自分の強みを教えてください</div></div></div>
+            <div class="field"><div class="label">志望動機・やりたいこと <span class="req">必須</span></div><textarea name="motivation" placeholder="参加したい理由、このプログラムで挑戦したいこと、活かせるスキルなど何でも書いてください。"></textarea></div>
+            <div class="field"><div class="label">自己PR・得意なこと <span class="req">必須</span></div><textarea name="pr" placeholder="これまでの経験や得意なことを自由に書いてください。" style="min-height:90px;"></textarea></div>
+          </div>
+
+          <div class="submit-sec">
+            <button type="submit" class="submit-btn" id="submit-btn">申し込む →</button>
+            <p class="submit-note">問い合わせ: <a href="mailto:royryu221317@gmail.com">royryu221317@gmail.com</a></p>
+          </div>
+
+          <div class="success-box" id="success-box">
+            <div class="s-icon">🎉</div>
+            <h3>申し込みを受け付けました！</h3>
+            <p>ご応募ありがとうございます。<br>メールにてご連絡します。<br>一緒に京都からビジネスをつくりましょう！</p>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function showForm() {
+    document.getElementById('view-poster').style.display = 'none';
+    document.getElementById('view-form').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  function showPoster() {
+    document.getElementById('view-form').style.display = 'none';
+    document.getElementById('view-poster').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  const form = document.getElementById('form');
+  const btn  = document.getElementById('submit-btn');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    form.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    form.querySelectorAll('.err-msg').forEach(el => el.remove());
+
+    let ok = true;
+    function err(el, msg) {
+      el.classList.add('field-error');
+      const p = document.createElement('p'); p.className = 'err-msg'; p.textContent = msg;
+      el.parentNode.appendChild(p); ok = false;
+    }
+    function errMsg(container, msg) {
+      const p = document.createElement('p'); p.className = 'err-msg'; p.textContent = msg;
+      container.appendChild(p); ok = false;
+    }
+
+    const name  = form.name;
+    const grade = form.grade;
+    const univ  = form.university;
+    const email = form.email;
+    const hours  = form.hours;
+    const motive = form.motivation;
+    const pr     = form.pr;
+
+    if (!name.value.trim()) err(name, '氏名を入力してください');
+    if (!grade.value) err(grade, '学年を選択してください');
+    if (!univ.value.trim()) err(univ, '大学名・学部を入力してください');
+    if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) err(email, '正しいメールアドレスを入力してください');
+
+    const role = form.querySelector('[name="role"]:checked');
+    if (!role) errMsg(document.getElementById('role-grid'), '希望ロールを選択してください');
+
+    const days = form.querySelectorAll('[name="days"]:checked');
+    if (!days.length) errMsg(document.getElementById('day-chips'), '活動できる曜日を選んでください');
+
+    if (!hours.value) err(hours, '活動時間の目安を選択してください');
+    if (!motive.value.trim()) err(motive, '志望動機を入力してください');
+    if (!pr.value.trim()) err(pr, '自己PRを入力してください');
+
+    if (!ok) {
+      form.querySelector('.field-error, .err-msg')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    const data = {
+      氏名: name.value, 大学学部: univ.value, 学年: grade.value, メール: email.value,
+      希望ロール: role.value,
+      活動可能曜日: Array.from(days).map(d => d.value).join('・'),
+      週の活動時間: hours.value, 志望動機: motive.value, 自己PR: pr.value,
+    };
+
+    try {
+      const res = await fetch('https://formspree.io/f/mrejajne', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        document.getElementById('success-box').style.display = 'block';
+        btn.textContent = '✓ 送信済み';
+        form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+      } else {
+        btn.disabled = false; btn.textContent = '申し込む →';
+        alert('送信に失敗しました。時間をおいて再度お試しください。');
+      }
+    } catch {
+      btn.disabled = false; btn.textContent = '申し込む →';
+      alert('通信エラーが発生しました。インターネット接続を確認してください。');
+    }
+  });
+</script>
+</body>
+</html>
